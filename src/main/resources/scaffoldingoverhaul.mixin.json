@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "package": "me.paypur.scaffoldingoverhaul.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "ScaffoldingBlockItemMixin",
+    "ScaffoldingBlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "scaffoldingoverhaul.refmap.json"
+}
