@@ -27,18 +27,10 @@ public abstract class ScaffoldingBlockItemMixin {
 
 //    @Inject(method = "updatePlacementContext", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/BlockPos$MutableBlockPos;move(Lnet/minecraft/core/Direction;)Lnet/minecraft/core/BlockPos$MutableBlockPos;", shift =  At.Shift.BEFORE))
 //    private void inject(BlockPlaceContext pContext, CallbackInfoReturnable<BlockPlaceContext> cir){
-//        if (pContext.isInside()) {
-//            Direction direction = pContext.getHorizontalDirection();
-//        }
-//        else {
-//            double x = Math.abs(pContext.getClickLocation().x % 1);
-//            double z = Math.abs(pContext.getClickLocation().z % 1);
-//            Direction direction = (x > 0.25 && x < 0.75 && z > 0.25 && z < 0.75) ? Direction.UP : pContext.getHorizontalDirection();
-//        }
 //    }
 
     /**
-     * @author
+     * @author paypur
      * @reason
      */
     @Overwrite
@@ -51,14 +43,21 @@ public abstract class ScaffoldingBlockItemMixin {
         if (!blockstate.is(block)) {
             return ScaffoldingBlock.getDistance(level, blockpos) == 7 ? null : pContext;
         } else {
-            Direction direction;
-
-            // incorrect behavior inside scaffolding
-
             double x = Math.abs(pContext.getClickLocation().x % 1);
             double y = Math.abs(pContext.getClickLocation().y % 1);
             double z = Math.abs(pContext.getClickLocation().z % 1);
-            direction = (x > 0.25 && x < 0.75 && y == 0 && z > 0.25 && z < 0.75) ? Direction.UP : pContext.getHorizontalDirection();
+            Direction direction;
+            if (z > -x + 1 && z > x && z > 0.75) {
+                direction = Direction.NORTH;
+            } else if (z > -x + 1 && z < x && x > 0.75) {
+                direction = Direction.EAST;
+            } else if (z < -x + 1 && z < x && z < 0.25) {
+                direction = Direction.SOUTH;
+            } else if (z < -x + 1 && z > x && x < 0.25) {
+                direction = Direction.WEST;
+            } else {
+                direction = Direction.UP;
+            }
 
             int i = 0;
             BlockPos.MutableBlockPos blockpos$mutableblockpos = blockpos.mutable().move(direction);
